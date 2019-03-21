@@ -1,24 +1,28 @@
 package br.com.paulo.service;
 
-import java.util.Calendar;
-
 import br.com.paulo.entity.Filme;
 import br.com.paulo.entity.NotaAluguel;
+import br.com.paulo.utils.DateUtils;
 
 public class AluguelService {
 
-	public NotaAluguel alugar(Filme filme) {
+	public NotaAluguel alugar(Filme filme, String tipoAluguel) {
+		if (filme.getEstoque() == 0)
+			throw new RuntimeException("Falta de estoque");
+
 		NotaAluguel aluguel = new NotaAluguel();
-		
-		aluguel.setPreco(filme.getAluguel());
-		
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DAY_OF_MONTH, 1);
-		
-		aluguel.setDataEntrega(cal.getTime());
-		
+
+		if ("extendido".equals(tipoAluguel)) {
+			aluguel.setPreco(filme.getAluguel() * 2);
+			aluguel.setDataEntrega(DateUtils.obterDiferencaDias(3));
+			aluguel.setPontuacao(2);
+		} else {
+			aluguel.setPreco(filme.getAluguel());
+			aluguel.setDataEntrega(DateUtils.obterDiferencaDias(1));
+			aluguel.setPontuacao(1);
+		}
+
 		filme.setEstoque(filme.getEstoque() - 1);
-		
 		return aluguel;
 	}
 }

@@ -2,14 +2,17 @@ package br.com.paulo.steps;
 
 import static org.junit.Assert.assertEquals;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 import br.com.paulo.entity.Filme;
 import br.com.paulo.entity.NotaAluguel;
 import br.com.paulo.service.AluguelService;
+import br.com.paulo.utils.DateUtils;
 import cucumber.api.java.pt.Dado;
-import cucumber.api.java.pt.Entao;
+import cucumber.api.java.pt.Então;
 import cucumber.api.java.pt.Quando;
 
 public class AlugarFilmesSteps {
@@ -17,6 +20,8 @@ public class AlugarFilmesSteps {
 	private Filme filme;
 	private AluguelService aluguelService = new AluguelService();
 	private NotaAluguel notaAluguel;
+	private String erro;
+	private String tipoAluguel;
 
 	@Dado("^um filme com estoque de (\\d+) unidades$")
 	public void umFilmeComEstoqueDeUnidades(int arg1) throws Throwable {
@@ -28,34 +33,48 @@ public class AlugarFilmesSteps {
 	public void queOPreçoDoAluguelSejaReais(int arg1) throws Throwable {
 		filme.setAluguel(arg1);
 	}
+	
+	@Dado("^que o tipo dp aluguel seja (extendido|comum)$")
+	public void queOTipoDpAluguelSejaExtendido(String tipo) throws Throwable {
+		tipoAluguel = tipo;
+	}
 
 	@Quando("^alugar$")
 	public void alugar() throws Throwable {
-		notaAluguel = aluguelService.alugar(filme);
+		try {
+			notaAluguel = aluguelService.alugar(filme, tipoAluguel);
+		} catch (Exception e) {
+			erro = e.getMessage();
+		}
 	}
 
-	@Entao("^o preço do aluguel será (\\d+) reais$")
+	@Então("^o preço do aluguel será (\\d+) reais$")
 	public void oPreçoDoAluguelSeráReais(int arg1) throws Throwable {
 		assertEquals(arg1, notaAluguel.getPreco());
 	}
 
-	@Entao("^a data de entrega será no dia seguinte$")
-	public void aDataDeEntregaSeráNoDiaSeguinte() throws Throwable {
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DAY_OF_MONTH, 1);
-
-		Date dataRetorno = notaAluguel.getDataEntrega();
-		Calendar cal2 = Calendar.getInstance();
-		cal2.setTime(dataRetorno);
-		
-		assertEquals(cal.get(Calendar.DAY_OF_MONTH), cal2.get(Calendar.DAY_OF_MONTH));
-		assertEquals(cal.get(Calendar.MONTH), cal2.get(Calendar.MONTH));
-		assertEquals(cal.get(Calendar.YEAR), cal2.get(Calendar.YEAR));
-	}
-
-	@Entao("^o estoque do filme será (\\d+) unidade$")
+	@Então("^o estoque do filme será (\\d+) unidade$")
 	public void oEstoqueDoFilmeSeráUnidade(int arg1) throws Throwable {
 		assertEquals(arg1, filme.getEstoque());
 	}
 
+	@Então("^não será possível por falta de estoque$")
+	public void nãoSeráPossívelPorFaltaDeEstoque() throws Throwable {
+		assertEquals("Falta de estoque", erro);
+	}
+	
+	@Então("^a data de entrega será em (\\d+) dias?$")
+	public void aDataDeEntregaSeráEmDias(int arg1) throws Throwable {
+		Date dataEsperada = DateUtils.obterDiferencaDias(arg1);
+		Date dataReal = notaAluguel.getDataEntrega();
+		
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		
+		assertEquals(df.format(dataReal), df.format(dataEsperada));
+	}
+
+	@Então("^a pontuação recebida será de (\\d+) pontos$")
+	public void aPontuaçãoRecebidaSeráDePontos(int arg1) throws Throwable {
+		assertEquals(arg1, notaAluguel.getPontuacao());
+	}
 }
