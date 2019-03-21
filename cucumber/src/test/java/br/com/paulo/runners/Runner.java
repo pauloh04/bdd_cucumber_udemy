@@ -8,10 +8,8 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-		features = "src/test/resources/features/aprender-cucumber.feature", 
+		features = "src/test/resources/features/alugar-filme.feature", 
 		glue = "br.com.paulo.steps", 
-//		tags = "@esse",
-//		tags = "~@ignore",
 		plugin = "pretty", 
 		monochrome = true, 
 		snippets = SnippetType.CAMELCASE)
