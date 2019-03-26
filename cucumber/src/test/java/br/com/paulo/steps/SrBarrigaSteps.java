@@ -2,10 +2,17 @@ package br.com.paulo.steps;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.pt.Dado;
 import cucumber.api.java.pt.Então;
@@ -85,8 +92,14 @@ public class SrBarrigaSteps {
 		String texto = driver.findElement(By.xpath("//div[starts-with(@class, 'alert alert-')]")).getText();
 		assertEquals(arg1, texto);
 	}
+
+	@After(order = 1, value = {"@funcionais"})
+	public void screenshot(Scenario scenario) throws IOException {
+		File file = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+		FileUtils.copyFile(file, new File("target/screenshot/" + scenario.getId() + ".jpg"));
+	}
 	
-	@After
+	@After(order = 0, value = {"@funcionais"})
 	public void fecharBrowser() {
 		driver.quit();
 	}

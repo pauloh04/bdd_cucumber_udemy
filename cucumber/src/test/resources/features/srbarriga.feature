@@ -1,4 +1,5 @@
 #language: pt
+@funcionais
 Funcionalidade: Cadastro de contas
 
 Como um usuário 
@@ -15,12 +16,12 @@ Quando seleciono Contas
 E seleciono Adicionar
 
 Esquema do Cenário:
-Quando informo a conta <conta>
+Quando informo a conta "<conta>"
 E seleciono Salvar
-Então recebo a mensagem <mensagem>
+Então recebo a mensagem "<mensagem>"
 
 Exemplos:
-|conta								|mensagem										 						|
-| "Conta de Teste"		| "Conta adicionada com sucesso!"				|
-| "" 									| "Informe o nome da conta"							|
-| "Conta mesmo nome"	| "Já existe uma conta com esse nome!"	|
+|conta								|mensagem										 				|
+| Conta de Teste		| Conta adicionada com sucesso!				|
+|  									| Informe o nome da conta							|
+| Conta mesmo nome	| Já existe uma conta com esse nome!	|
