@@ -1,82 +1,88 @@
 package br.com.paulo.steps;
 
-import cucumber.api.PendingException;
+import static org.junit.Assert.assertEquals;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import cucumber.api.java.After;
 import cucumber.api.java.pt.Dado;
 import cucumber.api.java.pt.Então;
 import cucumber.api.java.pt.Quando;
 
 public class SrBarrigaSteps {
 
+	private WebDriver driver;
+	
 	@Dado("^que estou acessando a aplicação$")
 	public void que_estou_acessando_a_aplicação() throws Throwable {
-		// Write code here that turns the phrase above into concrete actions
-		throw new PendingException();
+		driver = new ChromeDriver();
+		driver.get("http://srbarriga.herokuapp.com");
 	}
 
 	@Quando("^informo o usuário \"([^\"]*)\"$")
 	public void informo_o_usuário(String arg1) throws Throwable {
-		// Write code here that turns the phrase above into concrete actions
-		throw new PendingException();
+		driver.findElement(By.id("email")).sendKeys(arg1);
 	}
 
 	@Quando("^a senha \"([^\"]*)\"$")
 	public void a_senha(String arg1) throws Throwable {
-		// Write code here that turns the phrase above into concrete actions
-		throw new PendingException();
+		driver.findElement(By.id("senha")).sendKeys(arg1);
 	}
 
 	@Quando("^seleciono entrar$")
 	public void seleciono_entrar() throws Throwable {
-		// Write code here that turns the phrase above into concrete actions
-		throw new PendingException();
+		driver.findElement(By.tagName("button")).click();
 	}
 
 	@Então("^visualizo a página inicial$")
 	public void visualizo_a_página_inicial() throws Throwable {
-		// Write code here that turns the phrase above into concrete actions
-		throw new PendingException();
+		String texto = driver.findElement(By.xpath("//div[@class='alert alert-success']")).getText();
+		assertEquals("Bem vindo, Paulo!", texto);
 	}
 
 	@Quando("^seleciono Contas$")
 	public void seleciono_Contas() throws Throwable {
-		// Write code here that turns the phrase above into concrete actions
-		throw new PendingException();
+		driver.findElement(By.linkText("Contas")).click();
 	}
 
 	@Quando("^seleciono Adicionar$")
 	public void seleciono_Adicionar() throws Throwable {
-		// Write code here that turns the phrase above into concrete actions
-		throw new PendingException();
+		driver.findElement(By.linkText("Adicionar")).click();
 	}
 
 	@Quando("^informo a conta \"([^\"]*)\"$")
 	public void informo_a_conta(String arg1) throws Throwable {
-		// Write code here that turns the phrase above into concrete actions
-		throw new PendingException();
+		driver.findElement(By.id("nome")).sendKeys(arg1);
 	}
 
 	@Quando("^seleciono Salvar$")
 	public void seleciono_Salvar() throws Throwable {
-		// Write code here that turns the phrase above into concrete actions
-		throw new PendingException();
+		driver.findElement(By.tagName("button")).click();
 	}
 
 	@Então("^a conta é inserida com sucesso$")
 	public void a_conta_é_inserida_com_sucesso() throws Throwable {
-		// Write code here that turns the phrase above into concrete actions
-		throw new PendingException();
+		String texto = driver.findElement(By.xpath("//div[@class='alert alert-success']")).getText();
+		assertEquals("Conta adicionada com sucesso!", texto);
 	}
 
 	@Então("^sou notificar que o nome da conta é obrigatório$")
 	public void sou_notificar_que_o_nome_da_conta_é_obrigatório() throws Throwable {
-		// Write code here that turns the phrase above into concrete actions
-		throw new PendingException();
+		String texto = driver.findElement(By.xpath("//div[@class='alert alert-danger']")).getText();
+		assertEquals("Informe o nome da conta", texto);
 	}
 
 	@Então("^sou notificado que já existe uma conta com esse nome$")
 	public void sou_notificado_que_já_existe_uma_conta_com_esse_nome() throws Throwable {
-		// Write code here that turns the phrase above into concrete actions
-		throw new PendingException();
+		String texto = driver.findElement(By.xpath("//div[@class='alert alert-danger']")).getText();
+		assertEquals("Já existe uma conta com esse nome!", texto);
+	}
+	
+	@After
+	public void fecharBrowser() {
+		driver.quit();
 	}
 
 }
