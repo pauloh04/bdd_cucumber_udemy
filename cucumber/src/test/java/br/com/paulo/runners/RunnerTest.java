@@ -18,6 +18,7 @@ import cucumber.api.junit.Cucumber;
 		// plugin = {"pretty", "html:target/report-html", "json:target/report-json"},
 		plugin = {"pretty"},
 		monochrome = true, 
+		dryRun = false,
 		snippets = SnippetType.CAMELCASE)
 public class RunnerTest {
 	
