@@ -8,9 +8,10 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-		features = "src/test/resources/features/alugar-filme.feature", 
+		features = "src/test/resources/features/srbarriga.feature", 
 		glue = "br.com.paulo.steps", 
-		plugin = {"pretty", "html:target/report-html", "json:target/report-json"}, 
+		// plugin = {"pretty", "html:target/report-html", "json:target/report-json"},
+		plugin = {"pretty"},
 		monochrome = true, 
 		snippets = SnippetType.CAMELCASE)
 public class RunnerTest {
